@@ -1,6 +1,6 @@
 # Daily GitHub workflow
 
-Your code lives on GitHub: https://github.com/chinnajp/nammakural  
+Your code lives on GitHub: https://github.com/nammakural/nammakural  
 Laptop folder and GitHub stay in sync with **pull** (start) and **push** (finish).  
 Vercel updates automatically after every successful push to `main`.
 
@@ -52,7 +52,7 @@ npm run finish -- "Short description of what you changed"
 ## New computer / fresh folder
 
 ```powershell
-git clone https://github.com/chinnajp/nammakural.git
+git clone https://github.com/nammakural/nammakural.git
 cd nammakural
 npm install
 npm run sync
