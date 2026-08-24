@@ -1,5 +1,6 @@
 import { sendNotification } from '@/services/notifications'
 import type { CitizenUser } from '@/types'
+import { SITE_NAME } from '@/constants'
 
 const OTP_STORAGE_KEY = 'vc-citizen-otp'
 const PROFILES_KEY = 'vc-citizen-profiles'
@@ -116,7 +117,7 @@ export async function sendCitizenOtp(mobileInput: string): Promise<SendOtpResult
   const expiresAt = Date.now() + OTP_TTL_MS
   writePendingOtp({ mobile, code, expiresAt, attempts: 0 })
 
-  const body = `MyLocalVoice OTP: ${code}. Valid for 5 minutes. Do not share.`
+  const body = `${SITE_NAME} OTP: ${code}. Valid for 5 minutes. Do not share.`
   await Promise.all([
     sendNotification({ channel: 'sms', to: mobile, body }),
     sendNotification({ channel: 'whatsapp', to: mobile, body }),

@@ -15,8 +15,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'MyLocalVoice',
-        short_name: 'MyLocalVoice',
+        name: 'nammakural',
+        short_name: 'nammakural',
         description: 'Report and track village public issues with your Panchayat',
         theme_color: '#0d1117',
         background_color: '#0d1117',

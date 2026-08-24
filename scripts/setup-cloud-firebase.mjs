@@ -105,28 +105,28 @@ const db = getFirestore()
 
 const ADMINS = [
   {
-    email: 'admin@mylocalvoice.in',
+    email: 'admin@nammakural.in',
     password: 'admin123',
     displayName: 'Admin',
     role: 'super_admin',
     villageId: 'thiruppair',
   },
   {
-    email: 'president@mylocalvoice.in',
+    email: 'president@nammakural.in',
     password: 'president123',
     displayName: 'Village President',
     role: 'president',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff1@mylocalvoice.in',
+    email: 'staff1@nammakural.in',
     password: 'staff123',
     displayName: 'Staff 1',
     role: 'staff',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff2@mylocalvoice.in',
+    email: 'staff2@nammakural.in',
     password: 'staff123',
     displayName: 'Staff 2',
     role: 'staff',
@@ -169,6 +169,6 @@ await db.collection('villages').doc('thiruppair').set(
 )
 
 console.log('Cloud setup complete.')
-console.log('Admin:      admin@mylocalvoice.in / admin123')
-console.log('President:  president@mylocalvoice.in / president123')
+console.log('Admin:      admin@nammakural.in / admin123')
+console.log('President:  president@nammakural.in / president123')
 console.log('View data: https://console.firebase.google.com/project/mylocalvoice-a73f4/firestore')

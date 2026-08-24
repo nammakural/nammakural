@@ -20,7 +20,7 @@ import {
   upvoteComplaint,
 } from '@/services/complaints'
 import { downloadComplaintPdf } from '@/services/export'
-import { CATEGORY_LABELS } from '@/constants'
+import { CATEGORY_LABELS, SITE_URL } from '@/constants'
 import { useApp } from '@/contexts/AppContext'
 import type { Complaint } from '@/types'
 import { formatDateTime, getStatusBadgeClass, statusLabel } from '@/utils'
@@ -73,7 +73,7 @@ export function ComplaintDetailPage() {
   const shareUrl =
     typeof window !== 'undefined' && window.location.hostname === 'localhost'
       ? `${window.location.origin}/complaints/${complaint.complaintId}`
-      : `https://mylocalvoice.in/complaints/${complaint.complaintId}`
+      : `${SITE_URL}/complaints/${complaint.complaintId}`
   const canViewReporterInfo = isLeadership(admin?.role)
 
   return (

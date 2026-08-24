@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { useApp } from '@/contexts/AppContext'
-import { VILLAGE_AREAS } from '@/constants'
+import { SITE_DOMAIN, SITE_URL, VILLAGE_AREAS } from '@/constants'
 import { Button } from '@/components/ui'
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav'
 import { cn } from '@/utils'
@@ -171,12 +171,12 @@ export function PublicLayout() {
             <p className="font-display font-bold text-lg dark:text-white text-light-text mb-2">{t('brand')}</p>
             <p className="text-sm text-vc-muted">{t('tagline')}</p>
             <a
-              href="https://mylocalvoice.in"
+              href={SITE_URL}
               target="_blank"
               rel="noreferrer"
               className="text-sm text-sky-400 hover:underline mt-2 inline-block"
             >
-              MyLocalVoice.in
+              {SITE_DOMAIN}
             </a>
           </div>
           <div>
@@ -205,7 +205,7 @@ export function PublicLayout() {
           </div>
         </div>
         <div className="border-t dark:border-vc-border border-light-border py-4 text-center text-xs text-vc-muted">
-          © {new Date().getFullYear()} {village.name} Panchayat · {t('footer.rights')} · MyLocalVoice.in
+          © {new Date().getFullYear()} {village.name} Panchayat · {t('footer.rights')} · {SITE_DOMAIN}
         </div>
       </footer>
     </div>

@@ -1,5 +1,5 @@
 /**
- * Seed Firebase Auth + admins/{uid} for MyLocalVoice.
+ * Seed Firebase Auth + admins/{uid} for nammakural.
  *
  * Emulator (default):
  *   1. npm run emulators
@@ -44,42 +44,42 @@ const db = getFirestore()
 
 const ADMINS = [
   {
-    email: 'admin@mylocalvoice.in',
+    email: 'admin@nammakural.in',
     password: 'admin123',
     displayName: 'Admin',
     role: 'super_admin',
     villageId: 'thiruppair',
   },
   {
-    email: 'president@mylocalvoice.in',
+    email: 'president@nammakural.in',
     password: 'president123',
     displayName: 'Village President',
     role: 'president',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff1@mylocalvoice.in',
+    email: 'staff1@nammakural.in',
     password: 'staff123',
     displayName: 'Staff 1',
     role: 'staff',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff2@mylocalvoice.in',
+    email: 'staff2@nammakural.in',
     password: 'staff123',
     displayName: 'Staff 2',
     role: 'staff',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff3@mylocalvoice.in',
+    email: 'staff3@nammakural.in',
     password: 'staff123',
     displayName: 'Staff 3',
     role: 'staff',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff4@mylocalvoice.in',
+    email: 'staff4@nammakural.in',
     password: 'staff123',
     displayName: 'Staff 4',
     role: 'staff',
@@ -137,6 +137,6 @@ await db.collection('villages').doc('thiruppair').set(
 )
 
 console.log('Done.')
-console.log('Admin:      admin@mylocalvoice.in / admin123')
-console.log('President:  president@mylocalvoice.in / president123')
+console.log('Admin:      admin@nammakural.in / admin123')
+console.log('President:  president@nammakural.in / president123')
 process.exit(0)

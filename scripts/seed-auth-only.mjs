@@ -10,12 +10,12 @@ if (!getApps().length) initializeApp({ credential: cert(sa), projectId: sa.proje
 
 const auth = getAuth()
 const ADMINS = [
-  { email: 'admin@mylocalvoice.in', password: 'admin123', displayName: 'Admin' },
-  { email: 'president@mylocalvoice.in', password: 'president123', displayName: 'Village President' },
-  { email: 'staff1@mylocalvoice.in', password: 'staff123', displayName: 'Staff 1' },
-  { email: 'staff2@mylocalvoice.in', password: 'staff123', displayName: 'Staff 2' },
-  { email: 'staff3@mylocalvoice.in', password: 'staff123', displayName: 'Staff 3' },
-  { email: 'staff4@mylocalvoice.in', password: 'staff123', displayName: 'Staff 4' },
+  { email: 'admin@nammakural.in', password: 'admin123', displayName: 'Admin' },
+  { email: 'president@nammakural.in', password: 'president123', displayName: 'Village President' },
+  { email: 'staff1@nammakural.in', password: 'staff123', displayName: 'Staff 1' },
+  { email: 'staff2@nammakural.in', password: 'staff123', displayName: 'Staff 2' },
+  { email: 'staff3@nammakural.in', password: 'staff123', displayName: 'Staff 3' },
+  { email: 'staff4@nammakural.in', password: 'staff123', displayName: 'Staff 4' },
 ]
 
 for (const entry of ADMINS) {

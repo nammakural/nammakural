@@ -1,11 +1,11 @@
-# Firebase setup — MyLocalVoice
+# Firebase setup — nammakural
 
 ## Local (emulators) — works without a cloud project
 
 ```bash
 npm install
 npm run emulators          # terminal 1 — Auth :9099, Firestore :8080, Storage :9199, UI :4000
-npm run seed:admin         # terminal 2 — creates admin@mylocalvoice.in / admin123
+npm run seed:admin         # terminal 2 — creates admin@nammakural.in / admin123
 npm run dev                # terminal 2 — http://localhost:5173
 ```
 
@@ -25,9 +25,9 @@ Emulator UI: http://127.0.0.1:4000
 
 | Role        | Email                      | Password      |
 |-------------|----------------------------|---------------|
-| Admin       | admin@mylocalvoice.in      | admin123      |
-| President   | president@mylocalvoice.in  | president123  |
-| Staff 1–4   | staff1…staff4@mylocalvoice.in | staff123   |
+| Admin       | admin@nammakural.in      | admin123      |
+| President   | president@nammakural.in  | president123  |
+| Staff 1–4   | staff1…staff4@nammakural.in | staff123   |
 
 ## Production cloud project (`mylocalvoice-a73f4`)
 

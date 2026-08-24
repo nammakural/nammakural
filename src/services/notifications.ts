@@ -1,4 +1,5 @@
 import type { NotificationPayload } from '@/types'
+import { SITE_NAME, SITE_URL } from '@/constants'
 
 /**
  * Notification architecture — plug in real providers later:
@@ -60,7 +61,7 @@ export async function notifyComplaintStatus(
   complaintId: string,
   statusLabel: string,
 ) {
-  const body = `MyLocalVoice: Complaint ${complaintId} is now "${statusLabel}". Track at https://mylocalvoice.in/track?id=${complaintId}`
+  const body = `${SITE_NAME}: Complaint ${complaintId} is now "${statusLabel}". Track at ${SITE_URL}/track?id=${complaintId}`
   const results = []
 
   if (mobile) {

@@ -151,8 +151,9 @@ export const ASSIGNABLE_STAFF = ['Staff 1', 'Staff 2', 'Staff 3', 'Staff 4'] as 
 export type AssignableStaff = (typeof ASSIGNABLE_STAFF)[number]
 
 /** Live site domain */
-export const SITE_DOMAIN = 'MyLocalVoice.in'
-export const SITE_URL = 'https://mylocalvoice.in'
+export const SITE_NAME = 'nammakural'
+export const SITE_DOMAIN = 'nammakural.in'
+export const SITE_URL = 'https://nammakural.in'
 
 /** Thiruppair Village Panchayat — Poondi Block, Thiruvallur */
 export const DEFAULT_VILLAGE = {

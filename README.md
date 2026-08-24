@@ -1,4 +1,4 @@
-# MyLocalVoice
+# nammakural
 
 Modern, responsive village issue-tracking platform for citizens and Panchayat administrators.
 
@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Open https://MyLocalVoice.in (or http://localhost:5173 in development)
+Open https://nammakural.in (or http://localhost:5173 in development)
 
 ### Daily workflow (laptop ↔ GitHub ↔ Vercel)
 
@@ -25,7 +25,7 @@ npm run finish -- "…" # finish: commit + push (Vercel updates)
 
 ### Demo admin login (full access)
 
-- Email: `admin@mylocalvoice.in`
+- Email: `admin@nammakural.in`
 - Password: `admin123`
 
 ## Features

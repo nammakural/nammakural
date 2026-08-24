@@ -137,7 +137,7 @@ export function AdminLayout() {
         <aside className="w-[72px] h-screen sticky top-0 border-r border-vc-border bg-[#0a0e14] flex flex-col items-center py-3 gap-1">
           <NavLink
             to="/"
-            title="MyLocalVoice"
+            title={t('brand')}
             className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-400 to-sky-500 text-slate-900"
           >
             <TreePine className="h-5 w-5" />

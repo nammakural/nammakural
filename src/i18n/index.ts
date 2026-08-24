@@ -4,7 +4,7 @@ import { initReactI18next } from 'react-i18next'
 const resources = {
   en: {
     translation: {
-      brand: 'MyLocalVoice',
+      brand: 'nammakural',
       tagline: 'Report. Track. Resolve — together with your Panchayat.',
       welcome: {
         title: 'Welcome',
@@ -181,7 +181,7 @@ const resources = {
   },
   ta: {
     translation: {
-      brand: 'MyLocalVoice',
+      brand: 'நம்மகுரல்',
       tagline: 'புகார் · கண்காணிப்பு · தீர்வு — பஞ்சாயத்துடன்.',
       welcome: {
         title: 'வரவேற்பு',

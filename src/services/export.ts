@@ -1,5 +1,5 @@
 import type { Complaint } from '@/types'
-import { STATUS_LABELS, CATEGORY_LABELS, type ComplaintStatus } from '@/constants'
+import { STATUS_LABELS, CATEGORY_LABELS, SITE_NAME, type ComplaintStatus } from '@/constants'
 import { formatDateTime } from '@/utils'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
@@ -14,7 +14,7 @@ export function downloadComplaintPdf(
   const includeReporterInfo = options?.includeReporterInfo === true
   const doc = new jsPDF()
   doc.setFontSize(18)
-  doc.text('MyLocalVoice — Complaint Report', 14, 20)
+  doc.text(`${SITE_NAME} — Complaint Report`, 14, 20)
   doc.setFontSize(11)
   doc.text(villageName, 14, 28)
 
@@ -55,7 +55,7 @@ export function downloadComplaintPdf(
   doc.save(`${complaint.complaintId}.pdf`)
 }
 
-export function exportComplaintsExcel(complaints: Complaint[], filename = 'mylocalvoice-report.xlsx') {
+export function exportComplaintsExcel(complaints: Complaint[], filename = 'nammakural-report.xlsx') {
   const rows = complaints.map((c) => ({
     'Complaint ID': c.complaintId,
     Status: STATUS_LABELS[c.status],
@@ -83,7 +83,7 @@ export function exportComplaintsExcel(complaints: Complaint[], filename = 'myloc
   )
 }
 
-export function exportComplaintsCsv(complaints: Complaint[], filename = 'mylocalvoice-report.csv') {
+export function exportComplaintsCsv(complaints: Complaint[], filename = 'nammakural-report.csv') {
   const headers = [
     'Complaint ID',
     'Status',
