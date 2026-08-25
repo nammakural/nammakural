@@ -24,18 +24,46 @@ export function AdminComplaintsPage() {
   const [status, setStatus] = useState<ComplaintStatus | ''>('')
   const [list, setList] = useState<Complaint[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
+    let cancelled = false
     setLoading(true)
-    void searchComplaints({ query, category, status }).then((r) => {
-      setList(r)
-      setLoading(false)
-    })
+    setError('')
+    void searchComplaints({ query, category, status })
+      .then((r) => {
+        if (!cancelled) {
+          setList(r)
+          setLoading(false)
+        }
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          setError(e instanceof Error ? e.message : 'Could not load complaints')
+          setList([])
+          setLoading(false)
+        }
+      })
+    const onFocus = () => {
+      void searchComplaints({ query, category, status }).then((r) => {
+        if (!cancelled) setList(r)
+      })
+    }
+    window.addEventListener('focus', onFocus)
+    return () => {
+      cancelled = true
+      window.removeEventListener('focus', onFocus)
+    }
   }, [query, category, status])
 
   return (
     <div>
       <PageTitle title={t('admin.complaints')} />
+      {error ? (
+        <p className="text-sm text-red-400 mb-4">
+          Could not load live complaints. Refresh the page. {error}
+        </p>
+      ) : null}
       {!isLeadership(admin?.role) ? (
         <p className="text-sm text-vc-muted mb-4 -mt-2">
           You can view all complaints. Only complaints assigned to{' '}

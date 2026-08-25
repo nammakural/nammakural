@@ -141,14 +141,23 @@ export async function restFindComplaint(villageId: string, idOrComplaintId: stri
 
 export async function restSetComplaint(villageId: string, complaint: Complaint): Promise<void> {
   const url = documentsUrl('villages', villageId, 'complaints', complaint.id)
-  const res = await fetch(url, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fields: encodeFields({ ...complaint }) }),
-  })
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`Firestore REST write ${res.status}: ${text.slice(0, 180)}`)
+  const write = async (payload: Complaint) => {
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: encodeFields({ ...payload }) }),
+    })
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`Firestore REST write ${res.status}: ${text.slice(0, 180)}`)
+    }
+  }
+
+  try {
+    await write(complaint)
+  } catch (err) {
+    if (complaint.photos.length === 0 && !complaint.voiceUrl) throw err
+    await write({ ...complaint, photos: [], voiceUrl: undefined })
   }
 }
 

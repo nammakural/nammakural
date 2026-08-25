@@ -61,16 +61,11 @@ let complaintsStore: Complaint[] = structuredClone(mockComplaints)
 let activityStore: ActivityLogEntry[] = structuredClone(mockActivityLog)
 let sequence = complaintsStore.length + 1
 
+/** Live Vercel builds must never "succeed" by saving only in this browser. */
+const useBrowserMemory = useMockData && !import.meta.env.PROD
+
 function delay(ms = 200) {
   return new Promise((r) => setTimeout(r, ms))
-}
-
-async function listFromRest(villageId: string): Promise<Complaint[] | null> {
-  try {
-    return await restListComplaints(villageId)
-  } catch {
-    return null
-  }
 }
 
 async function appendActivityRest(
@@ -329,9 +324,11 @@ function buildDashboardStats(list: Complaint[]): DashboardStats {
 
 export async function getComplaints(villageId: string = DEFAULT_VILLAGE.id): Promise<Complaint[]> {
   if (useMockData) {
-    const live = await listFromRest(villageId)
-    if (live) {
+    try {
+      const live = await restListComplaints(villageId)
       return live.sort((a, b) => compareComplaintIdDesc(a.complaintId, b.complaintId))
+    } catch (err) {
+      if (!useBrowserMemory) throw err
     }
     await delay()
     return complaintsStore
@@ -385,8 +382,8 @@ export async function createComplaint(form: ReportIssueForm, villageId: string =
   const now = new Date().toISOString()
 
   if (useMockData) {
-    const liveList = await listFromRest(villageId)
-    if (liveList) {
+    try {
+      const liveList = await restListComplaints(villageId)
       let photoUrls: string[] = []
       let voiceUrl: string | undefined
       const docId = `c_${Date.now()}`
@@ -443,6 +440,10 @@ export async function createComplaint(form: ReportIssueForm, villageId: string =
         await notifyComplaintStatus(form.mobile, undefined, complaintId, STATUS_LABELS.submitted)
       }
       return complaint
+    } catch (err) {
+      if (!useBrowserMemory) {
+        throw err instanceof Error ? err : new Error('Could not save complaint to the database')
+      }
     }
 
     await delay(400)
