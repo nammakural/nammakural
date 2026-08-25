@@ -81,7 +81,7 @@ export function AdminSettingsPage() {
             Data mode:{' '}
             <span className={useMockData ? 'text-amber-400' : 'text-emerald-400'}>
               {useMockData
-                ? 'Mock (local demo)'
+                ? 'Firestore (no SDK keys — REST)'
                 : useEmulator
                   ? 'Firebase live (emulator)'
                   : 'Firebase live (cloud)'}
@@ -89,8 +89,8 @@ export function AdminSettingsPage() {
           </li>
           {useMockData ? (
             <li className="text-amber-400/90">
-              Complaints are not saved to a database. See FIREBASE_SETUP.md — run emulators or add
-              cloud keys, set VITE_USE_MOCK_DATA=false, restart the app.
+              Firebase SDK keys are not in this build. The site still reads/writes live
+              Firestore for {village.name} when the network allows.
             </li>
           ) : (
             <li className="text-emerald-400/90">

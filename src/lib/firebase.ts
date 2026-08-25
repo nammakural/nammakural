@@ -15,9 +15,9 @@ const firebaseConfig = {
 const useEmulator = import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true'
 
 export const useMockData =
-  import.meta.env.VITE_USE_MOCK_DATA !== 'false' ||
-  !firebaseConfig.apiKey ||
-  firebaseConfig.apiKey === 'your_api_key'
+  import.meta.env.VITE_USE_MOCK_DATA === 'true' ||
+  (import.meta.env.VITE_USE_MOCK_DATA !== 'false' &&
+    (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'your_api_key'))
 
 let app: FirebaseApp | null = null
 let auth: Auth | null = null

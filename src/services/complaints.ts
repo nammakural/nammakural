@@ -45,6 +45,15 @@ import { canAssignComplaints, canDeleteComplaints, canEditComplaint, canSetStatu
 import { auth, db, useMockData } from '@/lib/firebase'
 import { notifyComplaintStatus } from '@/services/notifications'
 import { uploadComplaintMedia } from '@/services/mediaUpload'
+import {
+  restDeleteComplaint,
+  restFindComplaint,
+  restListActivity,
+  restListComplaints,
+  restSetActivity,
+  restSetComplaint,
+  restSetCounter,
+} from '@/services/firestoreRest'
 import type { AdminUser } from '@/types'
 
 /** In-memory store for mock mode (mutates safely for demo) */
@@ -54,6 +63,29 @@ let sequence = complaintsStore.length + 1
 
 function delay(ms = 200) {
   return new Promise((r) => setTimeout(r, ms))
+}
+
+async function listFromRest(villageId: string): Promise<Complaint[] | null> {
+  try {
+    return await restListComplaints(villageId)
+  } catch {
+    return null
+  }
+}
+
+async function appendActivityRest(
+  villageId: string,
+  entry: Omit<ActivityLogEntry, 'id'> & { id?: string },
+) {
+  const id = entry.id || `al_${Date.now()}`
+  await restSetActivity(villageId, {
+    id,
+    action: entry.action,
+    details: entry.details,
+    actor: entry.actor,
+    createdAt: entry.createdAt,
+    complaintId: entry.complaintId,
+  })
 }
 
 function requireDb() {
@@ -297,6 +329,10 @@ function buildDashboardStats(list: Complaint[]): DashboardStats {
 
 export async function getComplaints(villageId: string = DEFAULT_VILLAGE.id): Promise<Complaint[]> {
   if (useMockData) {
+    const live = await listFromRest(villageId)
+    if (live) {
+      return live.sort((a, b) => compareComplaintIdDesc(a.complaintId, b.complaintId))
+    }
     await delay()
     return complaintsStore
       .filter((c) => c.villageId === villageId)
@@ -314,6 +350,12 @@ export async function getComplaintById(
   villageId: string = DEFAULT_VILLAGE.id,
 ): Promise<Complaint | null> {
   if (useMockData) {
+    try {
+      const found = await restFindComplaint(villageId, complaintId)
+      if (found) return found
+    } catch {
+      // fall through to in-memory demo data
+    }
     await delay()
     return (
       complaintsStore.find(
@@ -343,6 +385,66 @@ export async function createComplaint(form: ReportIssueForm, villageId: string =
   const now = new Date().toISOString()
 
   if (useMockData) {
+    const liveList = await listFromRest(villageId)
+    if (liveList) {
+      let photoUrls: string[] = []
+      let voiceUrl: string | undefined
+      const docId = `c_${Date.now()}`
+      try {
+        const media = await uploadComplaintMedia(villageId, docId, form.photos, form.voiceFile)
+        photoUrls = media.photoUrls
+        voiceUrl = media.voiceUrl
+      } catch {
+        photoUrls = []
+      }
+      const maxSeq = liveList.reduce((max, c) => Math.max(max, parseComplaintSequence(c.complaintId)), 0)
+      const seq = maxSeq + 1
+      const complaintId = generateComplaintId(DEFAULT_VILLAGE.code, seq)
+      const complaint: Complaint = {
+        id: docId,
+        complaintId,
+        villageId,
+        fullName: form.fullName,
+        mobile: form.mobile,
+        category: form.category,
+        description: form.description,
+        photos: photoUrls,
+        voiceUrl,
+        location: form.location,
+        status: 'submitted',
+        supporters: 1,
+        supporterIds: ['self'],
+        comments: [],
+        timeline: [
+          {
+            id: `t_${Date.now()}`,
+            status: 'submitted',
+            title: 'Complaint submitted',
+            createdAt: now,
+            createdBy: form.fullName || 'Citizen',
+          },
+        ],
+        adminNotes: [],
+        beforePhotos: [],
+        afterPhotos: [],
+        createdAt: now,
+        updatedAt: now,
+      }
+      await restSetComplaint(villageId, complaint)
+      await appendActivityRest(villageId, {
+        action: 'create',
+        details: `${complaintId} created (${CATEGORY_LABELS[form.category]})`,
+        actor: form.fullName || 'Citizen',
+        createdAt: now,
+        complaintId,
+      })
+      await restSetCounter(villageId, seq)
+      if (form.mobile) {
+        await notifyComplaintStatus(form.mobile, undefined, complaintId, STATUS_LABELS.submitted)
+      }
+      return complaint
+    }
+
     await delay(400)
     const complaintId = generateComplaintId(DEFAULT_VILLAGE.code, sequence++)
     const photoUrls = form.photos.map((f) => URL.createObjectURL(f))
@@ -473,6 +575,22 @@ export async function createComplaint(form: ReportIssueForm, villageId: string =
 
 export async function upvoteComplaint(id: string, voterKey: string) {
   if (useMockData) {
+    try {
+      const c = await restFindComplaint(DEFAULT_VILLAGE.id, id)
+      if (c) {
+        if (c.supporterIds.includes(voterKey)) return c
+        const updated: Complaint = {
+          ...c,
+          supporterIds: [...c.supporterIds, voterKey],
+          supporters: c.supporters + 1,
+          updatedAt: new Date().toISOString(),
+        }
+        await restSetComplaint(c.villageId, updated)
+        return updated
+      }
+    } catch {
+      // fall through
+    }
     await delay()
     const c = complaintsStore.find((x) => x.id === id || x.complaintId === id)
     if (!c) return null
@@ -503,6 +621,26 @@ export async function upvoteComplaint(id: string, voterKey: string) {
 
 export async function addComment(id: string, authorName: string, text: string) {
   if (useMockData) {
+    try {
+      const c = await restFindComplaint(DEFAULT_VILLAGE.id, id)
+      if (c) {
+        const comment = {
+          id: `cm_${Date.now()}`,
+          authorName,
+          text,
+          createdAt: new Date().toISOString(),
+        }
+        const updated: Complaint = {
+          ...c,
+          comments: [...c.comments, comment],
+          updatedAt: comment.createdAt,
+        }
+        await restSetComplaint(c.villageId, updated)
+        return updated
+      }
+    } catch {
+      // fall through
+    }
     await delay()
     const c = complaintsStore.find((x) => x.id === id || x.complaintId === id)
     if (!c) return null
@@ -553,6 +691,62 @@ export async function updateComplaintStatus(
   }
 
   if (useMockData) {
+    try {
+      const c = await restFindComplaint(DEFAULT_VILLAGE.id, id)
+      if (c) {
+        if (editor && !canEditComplaint(editor, c)) {
+          throw new Error(
+            c.assignedTo
+              ? `Only ${c.assignedTo} (or the President) can edit this complaint`
+              : 'This complaint is not assigned to you',
+          )
+        }
+        const now = new Date().toISOString()
+        const updated: Complaint = {
+          ...c,
+          status,
+          updatedAt: now,
+          assignedTo:
+            canAssignComplaints(role) && assignedTo !== undefined ? assignedTo || undefined : c.assignedTo,
+          resolvedAt: status === 'resolved' ? now : c.resolvedAt,
+          timeline: [
+            ...c.timeline,
+            {
+              id: `t_${Date.now()}`,
+              status,
+              title: `Status updated to ${STATUS_LABELS[status]}`,
+              ...(note ? { description: note } : {}),
+              createdAt: now,
+              createdBy: actor,
+            },
+          ],
+          adminNotes: note
+            ? [
+                ...c.adminNotes,
+                {
+                  id: `n_${Date.now()}`,
+                  text: note,
+                  createdAt: now,
+                  createdBy: actor,
+                  isInternal: false,
+                },
+              ]
+            : c.adminNotes,
+        }
+        await restSetComplaint(c.villageId, updated)
+        await appendActivityRest(c.villageId, {
+          action: 'status_update',
+          details: `${c.complaintId} → ${STATUS_LABELS[status]}`,
+          actor,
+          createdAt: now,
+          complaintId: c.complaintId,
+        })
+        await notifyComplaintStatus(c.mobile, undefined, c.complaintId, STATUS_LABELS[status])
+        return updated
+      }
+    } catch (err) {
+      if (err instanceof Error && err.message.startsWith('Only')) throw err
+    }
     await delay()
     const c = complaintsStore.find((x) => x.id === id || x.complaintId === id)
     if (!c) return null
@@ -681,6 +875,22 @@ export async function deleteComplaint(
   }
 
   if (useMockData) {
+    try {
+      const found = await restFindComplaint(DEFAULT_VILLAGE.id, id)
+      if (found) {
+        await restDeleteComplaint(found.villageId, found.id)
+        await appendActivityRest(found.villageId, {
+          action: 'delete',
+          details: `${found.complaintId} permanently deleted`,
+          actor,
+          createdAt: new Date().toISOString(),
+          complaintId: found.complaintId,
+        })
+        return true
+      }
+    } catch {
+      // fall through
+    }
     await delay()
     const index = complaintsStore.findIndex((x) => x.id === id || x.complaintId === id)
     if (index < 0) return false
@@ -720,6 +930,34 @@ export async function addInternalNote(
   editor?: Pick<AdminUser, 'role' | 'displayName'> | null,
 ) {
   if (useMockData) {
+    try {
+      const c = await restFindComplaint(DEFAULT_VILLAGE.id, id)
+      if (c) {
+        if (editor && !canEditComplaint(editor, c)) {
+          throw new Error(
+            c.assignedTo
+              ? `Only ${c.assignedTo} (or the President) can add notes`
+              : 'This complaint is not assigned to you',
+          )
+        }
+        const note = {
+          id: `n_${Date.now()}`,
+          text,
+          createdAt: new Date().toISOString(),
+          createdBy: actor,
+          isInternal: true,
+        }
+        const updated: Complaint = {
+          ...c,
+          adminNotes: [...c.adminNotes, note],
+          updatedAt: note.createdAt,
+        }
+        await restSetComplaint(c.villageId, updated)
+        return updated
+      }
+    } catch (err) {
+      if (err instanceof Error && err.message.startsWith('Only')) throw err
+    }
     await delay()
     const c = complaintsStore.find((x) => x.id === id || x.complaintId === id)
     if (!c) return null
@@ -769,8 +1007,12 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 
 export async function getActivityLog(villageId: string = DEFAULT_VILLAGE.id): Promise<ActivityLogEntry[]> {
   if (useMockData) {
-    await delay()
-    return activityStore
+    try {
+      return await restListActivity(villageId)
+    } catch {
+      await delay()
+      return activityStore
+    }
   }
 
   const snap = await getDocs(query(activityCol(villageId), orderBy('createdAt', 'desc'), limit(100)))
@@ -788,10 +1030,6 @@ export async function getActivityLog(villageId: string = DEFAULT_VILLAGE.id): Pr
 }
 
 export async function getDashboardStats(villageId: string = DEFAULT_VILLAGE.id): Promise<DashboardStats> {
-  if (useMockData) {
-    await delay()
-    return buildDashboardStats(complaintsStore)
-  }
   const list = await getComplaints(villageId)
   return buildDashboardStats(list)
 }

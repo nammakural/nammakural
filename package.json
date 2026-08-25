@@ -8,6 +8,7 @@
     "dev:firebase": "concurrently -k -n emu,web -c magenta,cyan \"npm run emulators\" \"npm run dev\"",
     "emulators": "firebase emulators:start --project demo-mylocalvoice",
     "seed:admin": "node scripts/seed-admin.mjs",
+    "seed:complaints": "node scripts/seed-complaints.mjs",
     "verify:firebase": "node scripts/verify-firebase.mjs && node scripts/verify-client-flow.mjs",
     "firebase:deploy-rules": "firebase deploy --only firestore:rules,storage",
     "build": "tsc -b && vite build",

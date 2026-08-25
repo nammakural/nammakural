@@ -46,7 +46,17 @@ npx firebase deploy --only firestore:rules,storage --project mylocalvoice-a73f4
 ```
 
 6. Restart `npm run dev` — Admin → Settings should show **Firebase live (cloud)**
-7. View data: https://console.firebase.google.com/project/mylocalvoice-a73f4/firestore
+7. Seed sample complaints so Admin is not empty:
+
+```bash
+set GOOGLE_APPLICATION_CREDENTIALS=.\serviceAccount.json
+set SEED_TARGET=cloud
+npm run seed:complaints
+```
+
+If `.env` already has cloud Firebase keys, `npm run seed:complaints` is enough.
+
+8. View data: https://console.firebase.google.com/project/mylocalvoice-a73f4/firestore
 
 ### Vercel env vars
 
