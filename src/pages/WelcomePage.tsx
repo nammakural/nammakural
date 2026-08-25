@@ -34,9 +34,9 @@ export function WelcomePage() {
   return (
     <div className="min-h-dvh relative flex flex-col overflow-hidden">
       <img
-        src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&q=80"
+        src="/welcome-village.jpg"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover object-center"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-emerald-950/70 via-emerald-900/55 to-emerald-950/90" />
 
