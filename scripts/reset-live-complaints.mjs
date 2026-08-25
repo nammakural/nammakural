@@ -4,7 +4,7 @@
  *
  *   node scripts/reset-live-complaints.mjs
  */
-const PROJECT = 'mylocalvoice-a73f4'
+const PROJECT = 'nammakural-b1878'
 const VILLAGE = 'thiruppair'
 const BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/villages/${VILLAGE}`
 

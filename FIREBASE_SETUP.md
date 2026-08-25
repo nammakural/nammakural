@@ -29,20 +29,24 @@ Emulator UI: http://127.0.0.1:4000
 | President   | president@nammakural.online  | president123  |
 | Staff 1–4   | staff1…staff4@nammakural.online | staff123   |
 
-## Production cloud project (`mylocalvoice-a73f4`)
+## Production cloud project (`nammakural-b1878`)
 
-Local `.env` is already pointed at this project (not committed). Complete these Console steps once:
+Owner account: **nammakuraladmin@gmail.com** (not prasanthjp95@gmail.com).
 
-1. Open https://console.firebase.google.com/project/mylocalvoice-a73f4
+Local `.env` must use this project’s web keys (not committed). Complete these Console steps once:
+
+1. Open https://console.firebase.google.com/project/nammakural-b1878/overview (signed in as nammakuraladmin@gmail.com)
 2. **Build → Authentication → Get started → Sign-in method → Email/Password → Enable**
 3. **Build → Firestore Database → Create database** (start in production mode; we deploy rules)
 4. **Build → Storage → Get started**
 5. Then run:
 
 ```bash
+npx firebase login --reauth
+npx firebase use nammakural-b1878
 set GOOGLE_APPLICATION_CREDENTIALS=.\serviceAccount.json
 node scripts/setup-cloud-firebase.mjs
-npx firebase deploy --only firestore:rules,storage --project mylocalvoice-a73f4
+npx firebase deploy --only firestore:rules,storage --project nammakural-b1878
 ```
 
 6. Restart `npm run dev` — Admin → Settings should show **Firebase live (cloud)**
@@ -56,7 +60,7 @@ npm run seed:complaints
 
 If `.env` already has cloud Firebase keys, `npm run seed:complaints` is enough.
 
-8. View data: https://console.firebase.google.com/project/mylocalvoice-a73f4/firestore
+8. View data: https://console.firebase.google.com/project/nammakural-b1878/firestore
 
 ### Vercel env vars
 

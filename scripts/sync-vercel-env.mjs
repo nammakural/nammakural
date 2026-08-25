@@ -31,16 +31,18 @@ const keys = [
 vars.VITE_USE_MOCK_DATA = 'false'
 vars.VITE_USE_FIREBASE_EMULATOR = 'false'
 
-const envs = ['production', 'preview', 'development']
-
-function run(args, input) {
+function run(args) {
   const r = spawnSync('npx', ['--yes', 'vercel', ...args], {
-    input,
     encoding: 'utf8',
     shell: true,
     env: process.env,
   })
-  return { status: r.status, stdout: r.stdout || '', stderr: r.stderr || '' }
+  const redact = (s) => (s || '').replace(/[A-Za-z0-9_\-]{20,}/g, '[redacted]')
+  return {
+    status: r.status,
+    stdout: redact(r.stdout),
+    stderr: redact(r.stderr),
+  }
 }
 
 for (const key of keys) {
@@ -49,17 +51,27 @@ for (const key of keys) {
     console.log(`skip ${key} (missing)`)
     continue
   }
-  for (const target of envs) {
-    // Remove existing (ignore errors)
-    run(['env', 'rm', key, target, '--yes'])
-    const add = run(['env', 'add', key, target, '--yes'], value)
-    if (add.status !== 0) {
-      console.error(`FAIL ${key} → ${target}`)
-      console.error(add.stderr || add.stdout)
-      process.exit(1)
-    }
-    console.log(`OK ${key} → ${target}`)
+  const add = run([
+    'env',
+    'add',
+    key,
+    'production,preview,development',
+    '--value',
+    value,
+    '--yes',
+    '--force',
+    '--no-sensitive',
+    '--project',
+    'nammakural',
+    '--scope',
+    'mylocalvoice',
+  ])
+  if (add.status !== 0) {
+    console.error(`FAIL ${key}`)
+    console.error(add.stderr || add.stdout)
+    process.exit(1)
   }
+  console.log(`OK ${key}`)
 }
 
 console.log('All Vercel env vars synced.')

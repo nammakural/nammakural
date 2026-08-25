@@ -6,7 +6,7 @@
 import type { ActivityLogEntry, Complaint } from '@/types'
 
 const PROJECT_ID =
-  (import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined) || 'mylocalvoice-a73f4'
+  (import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined) || 'nammakural-b1878'
 
 function documentsUrl(...segments: string[]) {
   const path = segments.filter(Boolean).join('/')

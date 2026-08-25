@@ -171,4 +171,4 @@ await db.collection('villages').doc('thiruppair').set(
 console.log('Cloud setup complete.')
 console.log('Admin:      admin@nammakural.online / admin123')
 console.log('President:  president@nammakural.online / president123')
-console.log('View data: https://console.firebase.google.com/project/mylocalvoice-a73f4/firestore')
+console.log('View data: https://console.firebase.google.com/project/nammakural-b1878/firestore')
