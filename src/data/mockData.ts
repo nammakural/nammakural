@@ -326,7 +326,7 @@ export const mockActivityLog: ActivityLogEntry[] = [
 
 /** Admin — full access (super_admin) */
 export const DEMO_ADMIN = {
-  email: 'admin@nammakural.in',
+  email: 'admin@nammakural.online',
   password: 'admin123',
   displayName: 'Admin',
   role: 'super_admin' as const,
@@ -334,7 +334,7 @@ export const DEMO_ADMIN = {
 
 /** Village president account (full leadership access) */
 export const DEMO_PRESIDENT = {
-  email: 'president@nammakural.in',
+  email: 'president@nammakural.online',
   password: 'president123',
   displayName: 'Village President',
   role: 'president' as const,
@@ -343,25 +343,25 @@ export const DEMO_PRESIDENT = {
 /** Individual staff logins — displayName must match Assign To (Staff 1…4) */
 export const DEMO_STAFF_MEMBERS = [
   {
-    email: 'staff1@nammakural.in',
+    email: 'staff1@nammakural.online',
     password: 'staff123',
     displayName: 'Staff 1',
     role: 'staff' as const,
   },
   {
-    email: 'staff2@nammakural.in',
+    email: 'staff2@nammakural.online',
     password: 'staff123',
     displayName: 'Staff 2',
     role: 'staff' as const,
   },
   {
-    email: 'staff3@nammakural.in',
+    email: 'staff3@nammakural.online',
     password: 'staff123',
     displayName: 'Staff 3',
     role: 'staff' as const,
   },
   {
-    email: 'staff4@nammakural.in',
+    email: 'staff4@nammakural.online',
     password: 'staff123',
     displayName: 'Staff 4',
     role: 'staff' as const,

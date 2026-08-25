@@ -5,7 +5,7 @@
 ```bash
 npm install
 npm run emulators          # terminal 1 — Auth :9099, Firestore :8080, Storage :9199, UI :4000
-npm run seed:admin         # terminal 2 — creates admin@nammakural.in / admin123
+npm run seed:admin         # terminal 2 — creates admin@nammakural.online / admin123
 npm run dev                # terminal 2 — http://localhost:5173
 ```
 
@@ -25,9 +25,9 @@ Emulator UI: http://127.0.0.1:4000
 
 | Role        | Email                      | Password      |
 |-------------|----------------------------|---------------|
-| Admin       | admin@nammakural.in      | admin123      |
-| President   | president@nammakural.in  | president123  |
-| Staff 1–4   | staff1…staff4@nammakural.in | staff123   |
+| Admin       | admin@nammakural.online      | admin123      |
+| President   | president@nammakural.online  | president123  |
+| Staff 1–4   | staff1…staff4@nammakural.online | staff123   |
 
 ## Production cloud project (`mylocalvoice-a73f4`)
 
@@ -58,6 +58,20 @@ VITE_USE_FIREBASE_EMULATOR=false
 ```
 
 Never upload `serviceAccount.json` to Vercel or GitHub.
+
+### Live domain (`nammakural.online`)
+
+1. **Vercel** → project → **Settings** → **Domains** → add `nammakural.online` and `www.nammakural.online`. Copy the DNS records Vercel shows.
+2. **Hostinger** → Domains → `nammakural.online` → DNS Zone:
+   - **A** `@` → `10.0.1.2` (or the IP Vercel shows)
+   - **CNAME** `www` → `cname.vercel-dns.com`
+   - Remove Hostinger parking / default A records for `@`
+3. **Firebase Console** → Authentication → Settings → **Authorized domains** → add:
+   - `nammakural.online`
+   - `www.nammakural.online`
+4. If Google Maps is used, add `https://nammakural.online/*` and `https://www.nammakural.online/*` to the API key HTTP referrers.
+
+Wait for DNS (often 15 minutes–a few hours). HTTPS is issued by Vercel automatically.
 
 ## Data model
 

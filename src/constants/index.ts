@@ -152,8 +152,8 @@ export type AssignableStaff = (typeof ASSIGNABLE_STAFF)[number]
 
 /** Live site domain */
 export const SITE_NAME = 'nammakural'
-export const SITE_DOMAIN = 'nammakural.in'
-export const SITE_URL = 'https://nammakural.in'
+export const SITE_DOMAIN = 'nammakural.online'
+export const SITE_URL = 'https://nammakural.online'
 
 /** Thiruppair Village Panchayat — Poondi Block, Thiruvallur */
 export const DEFAULT_VILLAGE = {

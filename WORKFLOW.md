@@ -11,7 +11,7 @@ Vercel updates automatically after every successful push to `main`.
 In the project folder:
 
 ```powershell
-cd "e:\my village smart project\village project"
+cd "e:\my village smart project\nammakural\nammakural"
 npm run sync
 npm run dev
 ```
@@ -68,7 +68,7 @@ npm run dev
 | Get latest from GitHub | `npm run sync` |
 | Run locally | `npm run dev` |
 | Save + upload to GitHub | `npm run finish -- "your message"` |
-| Live site | https://nammakural.in |
+| Live site | https://nammakural.online |
 | Admin login (hidden from public) | `/admin/login` |
 
 **Rule:** Always `npm run sync` before you start. Always `push` when you finish — or GitHub/Vercel will stay old.

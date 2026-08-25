@@ -7,12 +7,12 @@ Modern, responsive village issue-tracking platform for citizens and Panchayat ad
 ## Quick start
 
 ```bash
-cd "31/village project"
+cd "e:\my village smart project\nammakural\nammakural"
 npm install
 npm run dev
 ```
 
-Open https://nammakural.in (or http://localhost:5173 in development)
+Open https://nammakural.online (or http://localhost:5173 in development)
 
 ### Daily workflow (laptop ↔ GitHub ↔ Vercel)
 
@@ -25,7 +25,7 @@ npm run finish -- "…" # finish: commit + push (Vercel updates)
 
 ### Demo admin login (full access)
 
-- Email: `admin@nammakural.in`
+- Email: `admin@nammakural.online`
 - Password: `admin123`
 
 ## Features

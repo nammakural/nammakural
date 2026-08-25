@@ -44,42 +44,42 @@ const db = getFirestore()
 
 const ADMINS = [
   {
-    email: 'admin@nammakural.in',
+    email: 'admin@nammakural.online',
     password: 'admin123',
     displayName: 'Admin',
     role: 'super_admin',
     villageId: 'thiruppair',
   },
   {
-    email: 'president@nammakural.in',
+    email: 'president@nammakural.online',
     password: 'president123',
     displayName: 'Village President',
     role: 'president',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff1@nammakural.in',
+    email: 'staff1@nammakural.online',
     password: 'staff123',
     displayName: 'Staff 1',
     role: 'staff',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff2@nammakural.in',
+    email: 'staff2@nammakural.online',
     password: 'staff123',
     displayName: 'Staff 2',
     role: 'staff',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff3@nammakural.in',
+    email: 'staff3@nammakural.online',
     password: 'staff123',
     displayName: 'Staff 3',
     role: 'staff',
     villageId: 'thiruppair',
   },
   {
-    email: 'staff4@nammakural.in',
+    email: 'staff4@nammakural.online',
     password: 'staff123',
     displayName: 'Staff 4',
     role: 'staff',
@@ -137,6 +137,6 @@ await db.collection('villages').doc('thiruppair').set(
 )
 
 console.log('Done.')
-console.log('Admin:      admin@nammakural.in / admin123')
-console.log('President:  president@nammakural.in / president123')
+console.log('Admin:      admin@nammakural.online / admin123')
+console.log('President:  president@nammakural.online / president123')
 process.exit(0)
