@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import { LIVE_MAPS_API_KEY } from '@/lib/mapsKey'
 import { GoogleMap, Marker, useJsApiLoader, InfoWindow } from '@react-google-maps/api'
 import { Link } from 'react-router-dom'
 import type { Complaint } from '@/types'
@@ -21,8 +22,10 @@ export function VillageMap({
   onPickLocation?: (lat: number, lng: number) => void
   pickMode?: boolean
 }) {
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined
-  const hasKey = Boolean(apiKey && apiKey !== 'your_google_maps_api_key')
+  const envKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined
+  const apiKey =
+    envKey && envKey !== 'your_google_maps_api_key' ? envKey : LIVE_MAPS_API_KEY
+  const hasKey = Boolean(apiKey)
   const mapCenter = center || DEFAULT_VILLAGE.center
 
   if (!hasKey) {
