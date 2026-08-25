@@ -8,7 +8,6 @@ import { VILLAGE_AREAS } from '@/constants'
 import {
   clearCitizenOtp,
   profileToCitizenUser,
-  RECAPTCHA_ID,
   saveCitizenProfile,
   sendCitizenOtp,
   verifyCitizenOtp,
@@ -100,7 +99,7 @@ export function CitizenLoginPage() {
     try {
       const result = await sendCitizenOtp(data.mobile)
       setMobile(result.mobile)
-      setDemoCode(result.demoCode || '')
+      setDemoCode(result.demoCode)
       otpForm.reset({ otp: '' })
       setStep('otp')
     } catch (e) {
@@ -116,7 +115,7 @@ export function CitizenLoginPage() {
     setSending(true)
     try {
       const result = await sendCitizenOtp(mobile)
-      setDemoCode(result.demoCode || '')
+      setDemoCode(result.demoCode)
       otpForm.reset({ otp: '' })
     } catch (e) {
       const code = e instanceof Error ? e.message : 'SEND_FAILED'
@@ -126,10 +125,10 @@ export function CitizenLoginPage() {
     }
   }
 
-  const onVerifyOtp = otpForm.handleSubmit(async (data) => {
+  const onVerifyOtp = otpForm.handleSubmit((data) => {
     setFormError('')
     try {
-      const result = await verifyCitizenOtp(mobile, data.otp)
+      const result = verifyCitizenOtp(mobile, data.otp)
       if (result.isNewUser || !result.profile) {
         if (result.profile?.fullName) {
           profileForm.setValue('fullName', result.profile.fullName)
@@ -198,7 +197,6 @@ export function CitizenLoginPage() {
         </div>
       </div>
 
-      <div id={RECAPTCHA_ID} />
       <div className="flex-1 -mt-4 rounded-t-3xl bg-white px-5 pt-8 pb-10 max-w-lg mx-auto w-full shadow-[0_-8px_30px_rgba(6,78,59,0.08)]">
         <div className="flex items-center justify-center gap-2 mb-6">
           {(['mobile', 'otp', 'profile'] as Step[]).map((s, i) => (
