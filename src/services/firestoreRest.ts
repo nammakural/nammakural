@@ -86,6 +86,7 @@ function toComplaint(id: string, data: Record<string, unknown>): Complaint {
     createdAt: String(data.createdAt || ''),
     updatedAt: String(data.updatedAt || ''),
     resolvedAt: data.resolvedAt as string | undefined,
+    purged: Boolean(data.purged),
   }
 }
 
@@ -111,10 +112,12 @@ async function restGet(url: string): Promise<Response> {
 export async function restListComplaints(villageId: string): Promise<Complaint[]> {
   const res = await restGet(`${documentsUrl('villages', villageId, 'complaints')}?pageSize=200`)
   const json = (await res.json()) as { documents?: { name: string; fields?: Record<string, RestValue> }[] }
-  return (json.documents || []).map((doc) => {
-    const id = doc.name.split('/').pop() || ''
-    return toComplaint(id, decodeFields(doc.fields))
-  })
+  return (json.documents || [])
+    .map((doc) => {
+      const id = doc.name.split('/').pop() || ''
+      return toComplaint(id, decodeFields(doc.fields))
+    })
+    .filter((c) => !c.purged)
 }
 
 export async function restGetComplaint(villageId: string, docId: string): Promise<Complaint | null> {
@@ -126,7 +129,8 @@ export async function restGetComplaint(villageId: string, docId: string): Promis
   }
   const json = (await res.json()) as { name: string; fields?: Record<string, RestValue> }
   const id = json.name.split('/').pop() || docId
-  return toComplaint(id, decodeFields(json.fields))
+  const complaint = toComplaint(id, decodeFields(json.fields))
+  return complaint.purged ? null : complaint
 }
 
 export async function restFindComplaint(villageId: string, idOrComplaintId: string): Promise<Complaint | null> {

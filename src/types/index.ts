@@ -48,6 +48,8 @@ export interface Complaint {
   createdAt: string
   updatedAt: string
   resolvedAt?: string
+  /** Hidden from lists after a live reset; kept in Firestore. */
+  purged?: boolean
 }
 
 export interface Comment {

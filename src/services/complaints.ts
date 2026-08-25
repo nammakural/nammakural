@@ -153,6 +153,7 @@ function docToComplaint(id: string, data: DocumentData): Complaint {
     createdAt: data.createdAt,
     updatedAt: data.updatedAt,
     resolvedAt: data.resolvedAt,
+    purged: Boolean(data.purged),
   }
 }
 
@@ -205,6 +206,7 @@ async function maxExistingComplaintSeq(villageId: string): Promise<number> {
   const snap = await getDocs(complaintsCol(villageId))
   let max = 0
   snap.docs.forEach((d) => {
+    if (d.data().purged) return
     const n = parseComplaintSequence(String(d.data().complaintId || ''))
     if (n > max) max = n
   })
@@ -332,13 +334,14 @@ export async function getComplaints(villageId: string = DEFAULT_VILLAGE.id): Pro
     }
     await delay()
     return complaintsStore
-      .filter((c) => c.villageId === villageId)
+      .filter((c) => c.villageId === villageId && !c.purged)
       .sort((a, b) => compareComplaintIdDesc(a.complaintId, b.complaintId))
   }
 
   const snap = await getDocs(query(complaintsCol(villageId), orderBy('createdAt', 'desc')))
   return snap.docs
     .map((d) => docToComplaint(d.id, d.data()))
+    .filter((c) => !c.purged)
     .sort((a, b) => compareComplaintIdDesc(a.complaintId, b.complaintId))
 }
 
