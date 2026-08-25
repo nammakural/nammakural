@@ -98,7 +98,8 @@ export function AdminSettingsPage() {
               {useEmulator ? ' (local emulator — start with npm run emulators)' : ''}.
             </li>
           )}
-          <li>Notifications: SMS / WhatsApp / Email / Push providers stubbed in services/notifications.ts</li>
+          <li>Citizen OTP: Firebase Phone Auth SMS (WhatsApp needs a Meta Business account)</li>
+          <li>Notifications: Email / Push providers still stubbed in services/notifications.ts</li>
           <li>Maps: set VITE_GOOGLE_MAPS_API_KEY for live Google Maps</li>
         </ul>
       </Card>
